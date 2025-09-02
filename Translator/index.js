@@ -6,6 +6,11 @@
 //AND your server won't run if your arduino IDE is open. 
 //So if you are making changes to one, make sure the other is closed.
 
+http.createServer(function (req, res) {
+  res.writeHead(200, {'Content-Type': 'text/plain'});
+  res.end('Hello World 2!');
+}).listen(3000);
+
 //Heading
 const http = require('http');
 
@@ -128,11 +133,6 @@ setInterval(console.log(new Date()), 5000);
 
 let http = require('http');
 
-http.createServer(function (req, res) {
-  res.writeHead(200, {'Content-Type': 'text/plain'});
-  res.end('Hello World 2!');
-}).listen(3000);
-
 function testFunc(){
   
   const mockRequest = {
@@ -162,4 +162,5 @@ server.listen(PORT, () => {
     console.log(`Server running at http://localhost:${PORT}/`);
 
 });
+
 
