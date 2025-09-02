@@ -12,6 +12,7 @@ http.createServer(function (req, res) {
 }).listen(3000);
 
 //Heading
+/*
 const http = require('http');
 
 const server = http.createServer((req, res) => {
@@ -125,7 +126,7 @@ parser.on('data', line => {
     const speech = res?.response?.outputSpeech?.text || res?.response?.outputSpeech?.ssml || '';
     console.log(speech.replace(/^<speak>/i, '').replace(/<\/speak>$/i, ''));
   });
-});*/
+});
 
 //////////////////////////////////////////
 //TESTING
@@ -161,6 +162,7 @@ const PORT = 3000;
 server.listen(PORT, () => {
     console.log(`Server running at http://localhost:${PORT}/`);
 
-});
+});*/
+
 
 
