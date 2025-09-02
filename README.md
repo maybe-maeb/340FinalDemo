@@ -1,4 +1,2 @@
 # ec2-test
-# ec2-test
-# ec2-app
-# HELP IT WORKED???
+A demo for the 340 final
