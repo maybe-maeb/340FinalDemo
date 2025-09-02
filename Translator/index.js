@@ -124,7 +124,7 @@ parser.on('data', line => {
 
 //////////////////////////////////////////
 //TESTING
-setInterval(testFunc, 5000);
+setInterval(console.log(new Date()), 5000);
 
 function testFunc(){
   
@@ -153,4 +153,5 @@ function testFunc(){
 const PORT = 3000;
 server.listen(PORT, () => {
     console.log(`Server running at http://localhost:${PORT}/`);
+
 });
