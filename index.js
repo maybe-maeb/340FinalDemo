@@ -258,9 +258,9 @@ console.log('skill:', skill);
 console.log('typeof skill:', typeof skill);
 console.log('skill.appendAdditionalUserAgent:', skill.appendAdditionalUserAgent);
 
-const adapter = new ExpressAdapter(skill, false, false);
+const adapter = new ExpressAdapter(skill, true, true); // or false, false, depending on your needs
 
-app.post('/', adapter.getRequestHandlers());
+app.post('/', adapter.getRequestHandler());
 
 //Run Server
 const port = 3000;
