@@ -59,11 +59,24 @@
         },
         {
           "slots": [],
-          "name": "GetFromDatabaseIntent",
+          "name": "GetAllFromDatabaseIntent",
           "samples": [
             "get latest item from database",
             "get from database",
             "get database"
+          ]
+        },
+        {
+          "slots": [
+            {
+              "name": "id",
+              "type": "AMAZON.SearchQuery"
+            }
+          ],
+          "name": "GetItemFromDatabaseIntent",
+          "samples": [
+            "get {id} from database",
+            "get {id}"
           ]
         }
       ],

@@ -67,20 +67,36 @@ const InsertIntentHandler = {
     }
 };
 
-//A very simple call-and-response intent handler. Responds "Pong!" when the user enters "Ping"
-const GetFromDatabaseIntentHandler = {
+const GetAllFromDatabaseIntentHandler = {
     canHandle(handlerInput) {
         //If Alexa gets a request...
         return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
             ///And the prompt matches an utterance for the "PingIntent" intent...
-            && Alexa.getIntentName(handlerInput.requestEnvelope) === 'GetFromDatabaseIntent';
+            && Alexa.getIntentName(handlerInput.requestEnvelope) === 'GetAllFromDatabaseIntent';
+    },
+    //Do stuff
+    handle(handlerInput) {        
+        const speakOutput = getFromDatabase();
+
+        //Alexa starts building a response...
+        return handlerInput.responseBuilder
+            //And speaks the speakOutput variable
+            .speak(speakOutput)
+            .getResponse();
+    }
+};
+
+const GetItemFromDatabaseIntentHandler = {
+    canHandle(handlerInput) {
+        return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
+            && Alexa.getIntentName(handlerInput.requestEnvelope) === 'GetItemFromDatabaseIntent';
     },
     //Do stuff
     handle(handlerInput) {
         //Declare a variable called "speakOutput" to hold what we want to say
-        const speakOutput = 'Getting from database...!';
+        const id = Alexa.getSlotValue(handlerInput.requestEnvelope, 'id');
         
-
+        const speakOutput = getFromDatabase(id);
 
         //Alexa starts building a response...
         return handlerInput.responseBuilder
@@ -223,7 +239,8 @@ exports.handler = Alexa.SkillBuilders.custom()
         //NEW
         PingIntentHandler,
         InsertIntentHandler,
-        GetFromDatabaseIntentHandler,
+        GetAllFromDatabaseIntentHandler,
+        GetItemFromDatabaseIntentHandler,
         
         //BUILT IN
         LaunchRequestHandler,
