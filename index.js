@@ -9,6 +9,7 @@ const Alexa = require('ask-sdk-core');
 
 //Express
 const express = require('express')
+const app = express()
 
 const { ExpressAdapter } = require('ask-sdk-express-adapter');
 
@@ -252,7 +253,6 @@ exports.handler = Alexa.SkillBuilders.custom()
     .withCustomUserAgent('sample/hello-world/v1.2')
     .lambda();
 const adapter = new ExpressAdapter(skill, false, false);
-const app = express()
 
 app.post('/', adapter.getRequestHandlers());
 
