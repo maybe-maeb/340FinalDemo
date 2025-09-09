@@ -251,7 +251,7 @@ const skill = exports.handler = Alexa.SkillBuilders.custom()
     .addErrorHandlers(
         ErrorHandler)
     .withCustomUserAgent('sample/hello-world/v1.2')
-    .lambda();
+    .create();
 const adapter = new ExpressAdapter(skill, false, false);
 
 app.post('/', adapter.getRequestHandler());
