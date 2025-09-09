@@ -232,7 +232,7 @@ app.post('/addtodatabase/',
     });
 
 //Alexa Handler
-exports.handler = Alexa.SkillBuilders.custom()
+const skill = exports.handler = Alexa.SkillBuilders.custom()
     .addRequestHandlers(
         //NEW
         PingIntentHandler,
