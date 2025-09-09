@@ -1,6 +1,5 @@
 //Make sure to run the following commands in the amazon console where this file is located
 //npm install mysql2
-console.log('ask-sdk-core path:', require.resolve('ask-sdk-core'));
 
 //Database Connection
 const noun = require("./Model/noun.js");
