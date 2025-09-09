@@ -1,8 +1,6 @@
 //Make sure to run the following commands in the amazon console where this file is located
 //npm install mysql2
 
-let http = require('http');
-
 //Database Connection
 const noun = require("./Model/noun.js");
 
