@@ -251,7 +251,7 @@ const skill = exports.handler = Alexa.SkillBuilders.custom()
     .addErrorHandlers(
         ErrorHandler)
     .withCustomUserAgent('sample/hello-world/v1.2')
-    .lambda();
+    .create();
     
 console.log('skill:', skill);
 console.log('typeof skill:', typeof skill);
