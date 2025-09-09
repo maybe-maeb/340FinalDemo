@@ -42,7 +42,7 @@
               "type": "AMAZON.SearchQuery"
             }
           ],
-          "name": "ArduinoInsertIntent",
+          "name": "InsertIntent",
           "samples": [
             "add {item} to database",
             "add {item}",
@@ -55,6 +55,15 @@
           "name": "PingIntent",
           "samples": [
             "ping"
+          ]
+        },
+        {
+          "slots": [],
+          "name": "GetFromDatabaseIntent",
+          "samples": [
+            "get latest item from database",
+            "get from database",
+            "get database"
           ]
         }
       ],

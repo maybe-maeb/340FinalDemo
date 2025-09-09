@@ -3,13 +3,10 @@
 
 let http = require('http');
 
+//Database Connection
 const noun = require("./Model/noun.js");
 
-/* *
- * This sample demonstrates handling intents from an Alexa skill using the Alexa Skills Kit SDK (v2).
- * Please visit https://alexa.design/cookbook for additional examples on implementing slots, dialog management,
- * session persistence, api calls, and more.
- * */
+//Alexa Headers
 const Alexa = require('ask-sdk-core');
 
 const LaunchRequestHandler = {
@@ -51,15 +48,10 @@ const PingIntentHandler = {
     }
 };
 
-async function insertToDatabase(info = null){
-  const addResult = await noun.addRow({ info: info });
-        console.log('Add Result:', addResult);
-}
-
-const ArduinoInsertIntentHandler = {
+const InsertIntentHandler = {
     canHandle(handlerInput) {
         return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
-            && Alexa.getIntentName(handlerInput.requestEnvelope) === 'ArduinoInsertIntent';
+            && Alexa.getIntentName(handlerInput.requestEnvelope) === 'InsertIntent';
     },
     handle(handlerInput) {
         const item = Alexa.getSlotValue(handlerInput.requestEnvelope, 'item');
@@ -67,7 +59,7 @@ const ArduinoInsertIntentHandler = {
          // Example 1: Add a row
         insertToDatabase(item);
 
-        const speakOutput = "Added " + item + " to the database. Note: This program is not yet connected to a database, so no data was stored";
+        const speakOutput = "Added " + item + " to the database.";
         return handlerInput.responseBuilder
             .speak(speakOutput)
             //.reprompt('add a reprompt if you want to keep the session open for the user to respond')
@@ -75,6 +67,28 @@ const ArduinoInsertIntentHandler = {
     }
 };
 
+//A very simple call-and-response intent handler. Responds "Pong!" when the user enters "Ping"
+const GetFromDatabaseIntentHandler = {
+    canHandle(handlerInput) {
+        //If Alexa gets a request...
+        return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
+            ///And the prompt matches an utterance for the "PingIntent" intent...
+            && Alexa.getIntentName(handlerInput.requestEnvelope) === 'GetFromDatabaseIntent';
+    },
+    //Do stuff
+    handle(handlerInput) {
+        //Declare a variable called "speakOutput" to hold what we want to say
+        const speakOutput = 'Getting from database...!';
+        
+
+
+        //Alexa starts building a response...
+        return handlerInput.responseBuilder
+            //And speaks the speakOutput variable
+            .speak(speakOutput)
+            .getResponse();
+    }
+};
 //////////////////////////////////
 ///////END CUSTOM FUNCTIONS///////
 //////////////////////////////////
@@ -82,7 +96,6 @@ const ArduinoInsertIntentHandler = {
 //////////////////////////////////
 ////////BUILT IN FUNCTIONS////////
 //////////////////////////////////
-
 const HelloWorldIntentHandler = {
     canHandle(handlerInput) {
         return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
@@ -97,7 +110,6 @@ const HelloWorldIntentHandler = {
             .getResponse();
     }
 };
-
 const HelpIntentHandler = {
     canHandle(handlerInput) {
         return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
@@ -112,7 +124,6 @@ const HelpIntentHandler = {
             .getResponse();
     }
 };
-
 const CancelAndStopIntentHandler = {
     canHandle(handlerInput) {
         return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
@@ -127,11 +138,6 @@ const CancelAndStopIntentHandler = {
             .getResponse();
     }
 };
-/* *
- * FallbackIntent triggers when a customer says something that doesn’t map to any intents in your skill
- * It must also be defined in the language model (if the locale supports it)
- * This handler can be safely added but will be ingnored in locales that do not support it yet 
- * */
 const FallbackIntentHandler = {
     canHandle(handlerInput) {
         return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
@@ -146,11 +152,6 @@ const FallbackIntentHandler = {
             .getResponse();
     }
 };
-/* *
- * SessionEndedRequest notifies that a session was ended. This handler will be triggered when a currently open 
- * session is closed for one of the following reasons: 1) The user says "exit" or "quit". 2) The user does not 
- * respond or says something that does not match an intent defined in your voice model. 3) An error occurs 
- * */
 const SessionEndedRequestHandler = {
     canHandle(handlerInput) {
         return Alexa.getRequestType(handlerInput.requestEnvelope) === 'SessionEndedRequest';
@@ -161,11 +162,6 @@ const SessionEndedRequestHandler = {
         return handlerInput.responseBuilder.getResponse(); // notice we send an empty response
     }
 };
-/* *
- * The intent reflector is used for interaction model testing and debugging.
- * It will simply repeat the intent the user said. You can create custom handlers for your intents 
- * by defining them above, then also adding them to the request handler chain below 
- * */
 const IntentReflectorHandler = {
     canHandle(handlerInput) {
         return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest';
@@ -180,11 +176,6 @@ const IntentReflectorHandler = {
             .getResponse();
     }
 };
-/**
- * Generic error handling to capture any syntax or routing errors. If you receive an error
- * stating the request handler chain is not found, you have not implemented a handler for
- * the intent being invoked or included it in the skill builder below 
- * */
 const ErrorHandler = {
     canHandle() {
         return true;
@@ -204,20 +195,36 @@ const ErrorHandler = {
 //////END BUILT IN FUNCTIONS//////
 //////////////////////////////////
 
+//////////////////////////////////
+////////DATABASE FUNCTIONS////////
+//////////////////////////////////
+async function insertToDatabase(info = null){
+  const addResult = await noun.addRow({ info: info });
+  console.log('Add Result:', addResult);
+  return result;
+}
 
-        insertToDatabase("test item!");
+async function getFromDatabase(id = null){
+  const result = null;
+  if (id == null) result = await noun.selectAllRows();
+  else result = await noun.selectById(id);
+
+  console.log('Get Result:', result);
+  return result;
+}
+
+insertToDatabase("test item!");
+getFromDatabase();
+getFromDatabase(3);
 
 
-/**
- * This handler acts as the entry point for your skill, routing all request and response
- * payloads to the handlers above. Make sure any new handlers or interceptors you've
- * defined are included below. The order matters - they're processed top to bottom 
- * */
+//Alexa Handler
 exports.handler = Alexa.SkillBuilders.custom()
     .addRequestHandlers(
         //NEW
         PingIntentHandler,
-        ArduinoInsertIntentHandler,
+        InsertIntentHandler,
+        GetFromDatabaseIntentHandler,
         
         //BUILT IN
         LaunchRequestHandler,
@@ -232,6 +239,7 @@ exports.handler = Alexa.SkillBuilders.custom()
     .withCustomUserAgent('sample/hello-world/v1.2')
     .lambda();
 
+//Run Server
 http.createServer(function (req, res) {
   res.writeHead(200, {'Content-Type': 'text/plain'});
   res.end('Hello World!');
