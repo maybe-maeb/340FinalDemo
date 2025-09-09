@@ -9,7 +9,8 @@ const Alexa = require('ask-sdk-core');
 
 //Express
 const express = require('express')
-const app = express()
+
+const { ExpressAdapter } = require('ask-sdk-express-adapter');
 
 const LaunchRequestHandler = {
     canHandle(handlerInput) {
@@ -250,6 +251,10 @@ exports.handler = Alexa.SkillBuilders.custom()
         ErrorHandler)
     .withCustomUserAgent('sample/hello-world/v1.2')
     .lambda();
+const adapter = new ExpressAdapter(skill, false, false);
+const app = express()
+
+app.post('/', adapter.getRequestHandlers());
 
 //Run Server
 const port = 3000;
