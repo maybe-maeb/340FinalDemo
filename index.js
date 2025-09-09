@@ -260,7 +260,7 @@ console.log('skill.appendAdditionalUserAgent:', skill.appendAdditionalUserAgent)
 
 const adapter = new ExpressAdapter(skill, true, true); // or false, false, depending on your needs
 
-app.post('/', adapter.getRequestHandler());
+app.post('/', adapter.getRequestHandlers());
 
 //Run Server
 const port = 3000;
