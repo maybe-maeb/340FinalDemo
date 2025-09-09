@@ -51,6 +51,11 @@ const PingIntentHandler = {
     }
 };
 
+async function insertToDatabase(info = null){
+  const addResult = await noun.addRow({ info: 'Test info from script' });
+        console.log('Add Result:', addResult);
+}
+
 const ArduinoInsertIntentHandler = {
     canHandle(handlerInput) {
         return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
@@ -58,6 +63,9 @@ const ArduinoInsertIntentHandler = {
     },
     handle(handlerInput) {
         const item = Alexa.getSlotValue(handlerInput.requestEnvelope, 'item');
+
+         // Example 1: Add a row
+        insertToDatabase(item);
 
         const speakOutput = "Added " + item + " to the database. Note: This program is not yet connected to a database, so no data was stored";
         return handlerInput.responseBuilder
