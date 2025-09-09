@@ -201,7 +201,6 @@ const ErrorHandler = {
 async function insertToDatabase(info = null){
   const addResult = await noun.addRow({ info: info });
   console.log('Add Result:', addResult);
-  return result;
 }
 
 async function getFromDatabase(id = null){
