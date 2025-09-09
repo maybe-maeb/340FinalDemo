@@ -232,7 +232,7 @@ app.post('/addtodatabase/',
     });
 
 //Alexa Handler
-const skill = exports.handler = Alexa.SkillBuilders.custom()
+const skill = Alexa.SkillBuilders.custom()
     .addRequestHandlers(
         //NEW
         PingIntentHandler,
@@ -251,7 +251,8 @@ const skill = exports.handler = Alexa.SkillBuilders.custom()
     .addErrorHandlers(
         ErrorHandler)
     .withCustomUserAgent('sample/hello-world/v1.2')
-    .create();
+    .lambda();
+
 const adapter = new ExpressAdapter(skill, false, false);
 
 app.post('/', adapter.getRequestHandler());
