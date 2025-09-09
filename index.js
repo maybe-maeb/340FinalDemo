@@ -253,10 +253,6 @@ const skill = exports.handler = Alexa.SkillBuilders.custom()
         ErrorHandler)
     .withCustomUserAgent('sample/hello-world/v1.2')
     .create();
-    
-console.log('skill:', skill);
-console.log('typeof skill:', typeof skill);
-console.log('skill.appendAdditionalUserAgent:', skill.appendAdditionalUserAgent);
 
 const adapter = new ExpressAdapter(skill, true, true); // or false, false, depending on your needs
 
