@@ -1,6 +1,6 @@
 const connection = require("./connection");
 
-async function selectAllRows(parameters = {}) {
+async function selectAllRows() {
     let sqlStatement = `SELECT * FROM 340demo`
 
     return await connection.query(sqlStatement, queryParameters);
