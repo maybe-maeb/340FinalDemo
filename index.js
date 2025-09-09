@@ -52,7 +52,7 @@ const PingIntentHandler = {
 };
 
 async function insertToDatabase(info = null){
-  const addResult = await noun.addRow({ info: 'Test info from script' });
+  const addResult = await noun.addRow({ info: info });
         console.log('Add Result:', addResult);
 }
 
