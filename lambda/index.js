@@ -1,10 +1,3 @@
-//Make sure to run the following commands in the amazon console where this file is located
-//npm install mysql2
-
-let http = require('http');
-
-const noun = require("./Model/noun.js");
-
 /* *
  * This sample demonstrates handling intents from an Alexa skill using the Alexa Skills Kit SDK (v2).
  * Please visit https://alexa.design/cookbook for additional examples on implementing slots, dialog management,
@@ -220,10 +213,3 @@ exports.handler = Alexa.SkillBuilders.custom()
         ErrorHandler)
     .withCustomUserAgent('sample/hello-world/v1.2')
     .lambda();
-
-http.createServer(function (req, res) {
-  res.writeHead(200, {'Content-Type': 'text/plain'});
-  res.end('Hello World!');
-}).listen(3000);
-
-console.log("Server running!");
