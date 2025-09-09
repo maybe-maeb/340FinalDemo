@@ -12,7 +12,7 @@ const LaunchRequestHandler = {
 
 const skill = Alexa.SkillBuilders.custom()
   .addRequestHandlers(LaunchRequestHandler)
-  .lambda();
+  .create();
 
 console.log('appendAdditionalUserAgent:', skill.appendAdditionalUserAgent); // Should be a function
 
