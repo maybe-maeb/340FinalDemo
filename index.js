@@ -9,6 +9,10 @@ const noun = require("./Model/noun.js");
 //Alexa Headers
 const Alexa = require('ask-sdk-core');
 
+//Express
+const express = require('express')
+const app = express()
+
 const LaunchRequestHandler = {
     canHandle(handlerInput) {
         return Alexa.getRequestType(handlerInput.requestEnvelope) === 'LaunchRequest';
@@ -56,7 +60,6 @@ const InsertIntentHandler = {
     handle(handlerInput) {
         const item = Alexa.getSlotValue(handlerInput.requestEnvelope, 'item');
 
-         // Example 1: Add a row
         insertToDatabase(item);
 
         const speakOutput = "Added " + item + " to the database.";
@@ -69,18 +72,13 @@ const InsertIntentHandler = {
 
 const GetAllFromDatabaseIntentHandler = {
     canHandle(handlerInput) {
-        //If Alexa gets a request...
         return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
-            ///And the prompt matches an utterance for the "PingIntent" intent...
             && Alexa.getIntentName(handlerInput.requestEnvelope) === 'GetAllFromDatabaseIntent';
     },
-    //Do stuff
     handle(handlerInput) {        
         const speakOutput = getFromDatabase();
 
-        //Alexa starts building a response...
         return handlerInput.responseBuilder
-            //And speaks the speakOutput variable
             .speak(speakOutput)
             .getResponse();
     }
@@ -91,16 +89,12 @@ const GetItemFromDatabaseIntentHandler = {
         return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
             && Alexa.getIntentName(handlerInput.requestEnvelope) === 'GetItemFromDatabaseIntent';
     },
-    //Do stuff
     handle(handlerInput) {
-        //Declare a variable called "speakOutput" to hold what we want to say
         const id = Alexa.getSlotValue(handlerInput.requestEnvelope, 'id');
         
         const speakOutput = getFromDatabase(id);
 
-        //Alexa starts building a response...
         return handlerInput.responseBuilder
-            //And speaks the speakOutput variable
             .speak(speakOutput)
             .getResponse();
     }
