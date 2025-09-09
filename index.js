@@ -252,7 +252,7 @@ const skill = exports.handler = Alexa.SkillBuilders.custom()
     .addErrorHandlers(
         ErrorHandler)
     .withCustomUserAgent('sample/hello-world/v1.2')
-    .create();
+    .getSkill();
     
 console.log('skill:', skill);
 console.log('typeof skill:', typeof skill);
@@ -267,3 +267,5 @@ const port = 3000;
 app.get('/', (req, res) => {
   res.send('Hello World!')
 })
+
+exports.handler = skills.lambda();
