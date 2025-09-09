@@ -10,6 +10,7 @@ const Alexa = require('ask-sdk-core');
 
 //Express
 const express = require('express')
+const app = express()
 
 const { ExpressAdapter } = require('ask-sdk-express-adapter');
 
@@ -225,11 +226,11 @@ async function getFromDatabase(id = null){
 //////////////////////////////////
 ////////ARDUINO RECEIVERS/////////
 //////////////////////////////////
-/*app.post('/addtodatabase/',
+app.post('/addtodatabase/',
     (req, res) => {
         insertToDatabase("New test item!!");
         res.send("POST Request Called")
-    });*/
+    });
 
 //Alexa Handler
 const skill = exports.handler = Alexa.SkillBuilders.custom()
@@ -253,21 +254,16 @@ const skill = exports.handler = Alexa.SkillBuilders.custom()
     .withCustomUserAgent('sample/hello-world/v1.2')
     .create();
     
-const adapter = new ExpressAdapter(skill, false, false);
-const app = express();
+console.log('skill:', skill);
+console.log('typeof skill:', typeof skill);
+console.log('skill.appendAdditionalUserAgent:', skill.appendAdditionalUserAgent);
 
+const adapter = new ExpressAdapter(skill, true, true); // or false, false, depending on your needs
 
-//Send index.html to the client
-//THIS HAS BEEN COMMENTED OUT BECAUSE IT WAS BREAKING STYLESEETS
-//app.get('/', function (req, res) {
-//    res.sendFile(path.join(__dirname, './public/index.html'));
-//});
+app.post('/', adapter.getRequestHandler());
 
-app.post('/', adapter.getRequestHandlers());
-exports.app = app;
-
-//Print the current time
-let date = new Date();
-let month = date.getMonth() + 1;
-let datetime = date.getDate() + "-" + month + "-" + date.getFullYear() + " at " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds()
-console.log("Started running on " + datetime + " UTC on port 3004.");
+//Run Server
+const port = 3000;
+app.get('/', (req, res) => {
+  res.send('Hello World!')
+})
