@@ -250,9 +250,11 @@ exports.handler = Alexa.SkillBuilders.custom()
     .lambda();
 
 //Run Server
-http.createServer(function (req, res) {
-  res.writeHead(200, {'Content-Type': 'text/plain'});
-  res.end('Hello World!');
-}).listen(3000);
-
+const port = 3000;
+app.get('/', (req, res) => {
+  res.send('Hello World!')
+})
+app.listen(port, () => {
+  console.log(`Example app listening on port ${port}`)
+})
 console.log("Server running!");
