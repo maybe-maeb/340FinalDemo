@@ -3,7 +3,7 @@ const connection = require("./connection");
 async function selectAllRows() {
     let sqlStatement = `SELECT * FROM 340demo`
 
-    return await connection.query(sqlStatement, queryParameters);
+    return await connection.query(sqlStatement);
 }
 
 async function selectById(parameters = {}) {
