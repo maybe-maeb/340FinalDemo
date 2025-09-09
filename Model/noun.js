@@ -8,7 +8,7 @@ async function selectAllRows() {
 
 async function selectById(parameters = {}) {
     const sqlStatement = "SELECT * FROM 340demo WHERE id = ?"
-    const queryParameters = [parameters.params.id];
+    const queryParameters = [parameters.id];
     return await connection.query(sqlStatement, queryParameters);
 }
 
