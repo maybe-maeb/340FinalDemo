@@ -252,7 +252,7 @@ exports.handler = Alexa.SkillBuilders.custom()
 //Run Server
 const port = 3000;
 app.get('/', (req, res) => {
-  res.send('Hello Worlddddd 2!')
+  res.send('Hello World!')
 })
 
 app.listen(port, () => {
