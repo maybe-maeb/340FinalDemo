@@ -220,10 +220,14 @@ async function getFromDatabase(id = null){
   return result;
 }
 
-insertToDatabase("test item!");
-getFromDatabase();
-getFromDatabase(3);
-
+//////////////////////////////////
+////////ARDUINO RECEIVERS/////////
+//////////////////////////////////
+app.post('/addtodatabase/',
+    (req, res) => {
+        insertToDatabase("New test item!!");
+        res.send("POST Request Called")
+    });
 
 //Alexa Handler
 exports.handler = Alexa.SkillBuilders.custom()
