@@ -207,7 +207,7 @@ async function insertToDatabase(info = null){
 async function getFromDatabase(id = null){
   const result = null;
   if (id == null) result = await noun.selectAllRows();
-  else result = await noun.selectById(id);
+  else result = await noun.selectById({id: id});
 
   console.log('Get Result:', result);
   return result;
