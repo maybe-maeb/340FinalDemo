@@ -254,6 +254,10 @@ exports.handler = skillBuilder.lambda();
 
 // For Express:
 const skill = skillBuilder.create();
+
+console.log('Skill type:', typeof skill);
+console.log(skill);
+
 const adapter = new ExpressAdapter(skill, true, true);
 
 app.post('/', adapter.getRequestHandlers());
