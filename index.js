@@ -43,7 +43,7 @@ const PingIntentHandler = {
     handle(handlerInput) {
         //Declare a variable called "speakOutput" to hold what we want to say
         const speakOutput = 'Pong!';
-        
+
         //Alexa starts building a response...
         return handlerInput.responseBuilder
             //And speaks the speakOutput variable
@@ -75,13 +75,26 @@ const GetAllFromDatabaseIntentHandler = {
         return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
             && Alexa.getIntentName(handlerInput.requestEnvelope) === 'GetAllFromDatabaseIntent';
     },
-    async handle(handlerInput) {        
+    async handle(handlerInput) {
         try {
             const result = await getFromDatabase();
-            const speakOutput = result.length ? result.join(', ') : 'The database is empty.';
+
+            let speakOutput;
+            if (!result || result.length === 0) {
+                speakOutput = id ? `No item found with ID ${id}.` : 'The database is empty.';
+            } else if (Array.isArray(result)) {
+                // Convert array of objects to a readable string
+                speakOutput = result.map(item => item.info || JSON.stringify(item)).join(', ');
+            } else if (typeof result === 'object') {
+                speakOutput = result.info || JSON.stringify(result);
+            } else {
+                speakOutput = String(result);
+            }
+
             return handlerInput.responseBuilder
                 .speak(speakOutput)
                 .getResponse();
+
         } catch (err) {
             console.error('Database error:', err);
             return handlerInput.responseBuilder
@@ -97,33 +110,33 @@ const GetItemFromDatabaseIntentHandler = {
             && Alexa.getIntentName(handlerInput.requestEnvelope) === 'GetItemFromDatabaseIntent';
     },
     async handle(handlerInput) {
-    try {
-        const id = Alexa.getSlotValue(handlerInput.requestEnvelope, 'id');
-        const result = await getFromDatabase(id);
+        try {
+            const id = Alexa.getSlotValue(handlerInput.requestEnvelope, 'id');
+            const result = await getFromDatabase(id);
 
-        let speakOutput;
-        if (!result || result.length === 0) {
-            speakOutput = id ? `No item found with ID ${id}.` : 'The database is empty.';
-        } else if (Array.isArray(result)) {
-            // Convert array of objects to a readable string
-            speakOutput = result.map(item => item.info || JSON.stringify(item)).join(', ');
-        } else if (typeof result === 'object') {
-            speakOutput = result.info || JSON.stringify(result);
-        } else {
-            speakOutput = String(result);
+            let speakOutput;
+            if (!result || result.length === 0) {
+                speakOutput = id ? `No item found with ID ${id}.` : 'The database is empty.';
+            } else if (Array.isArray(result)) {
+                // Convert array of objects to a readable string
+                speakOutput = result.map(item => item.info || JSON.stringify(item)).join(', ');
+            } else if (typeof result === 'object') {
+                speakOutput = result.info || JSON.stringify(result);
+            } else {
+                speakOutput = String(result);
+            }
+
+            return handlerInput.responseBuilder
+                .speak(speakOutput)
+                .getResponse();
+
+        } catch (err) {
+            console.error('Database error:', err);
+            return handlerInput.responseBuilder
+                .speak('Sorry, I could not access the database right now.')
+                .getResponse();
         }
-
-        return handlerInput.responseBuilder
-            .speak(speakOutput)
-            .getResponse();
-
-    } catch (err) {
-        console.error('Database error:', err);
-        return handlerInput.responseBuilder
-            .speak('Sorry, I could not access the database right now.')
-            .getResponse();
     }
-}
 
 };
 //////////////////////////////////
@@ -235,18 +248,18 @@ const ErrorHandler = {
 //////////////////////////////////
 ////////DATABASE FUNCTIONS////////
 //////////////////////////////////
-async function insertToDatabase(info = null){
-  const addResult = await noun.addRow({ info: info });
-  console.log('Add Result:', addResult);
+async function insertToDatabase(info = null) {
+    const addResult = await noun.addRow({ info: info });
+    console.log('Add Result:', addResult);
 }
 
-async function getFromDatabase(id = null){
-  let result = null;
-  if (id == null) result = await noun.selectAllRows();
-  else result = await noun.selectById({id: id});
+async function getFromDatabase(id = null) {
+    let result = null;
+    if (id == null) result = await noun.selectAllRows();
+    else result = await noun.selectById({ id: id });
 
-  console.log('Get Result:', result);
-  return result;
+    console.log('Get Result:', result);
+    return result;
 }
 
 //////////////////////////////////
@@ -285,6 +298,6 @@ app.post('/', adapter.getRequestHandlers());
 //Run Server
 const port = 3000;
 app.get('/', (req, res) => {
-  res.send('Hello World!')
+    res.send('Hello World!')
 })
 app.listen(port, () => console.log("Running on 3000"));
