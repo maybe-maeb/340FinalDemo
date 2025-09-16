@@ -97,20 +97,34 @@ const GetItemFromDatabaseIntentHandler = {
             && Alexa.getIntentName(handlerInput.requestEnvelope) === 'GetItemFromDatabaseIntent';
     },
     async handle(handlerInput) {
-         try {
-            const id = Alexa.getSlotValue(handlerInput.requestEnvelope, 'id');
-            const result = await getFromDatabase(id);
-            const speakOutput = result ? result : `No item found with ID ${id}.`;
-            return handlerInput.responseBuilder
-                .speak(speakOutput)
-                .getResponse();
-        } catch (err) {
-            console.error('Database error:', err);
-            return handlerInput.responseBuilder
-                .speak('Sorry, I could not access the database right now.')
-                .getResponse();
+    try {
+        const id = Alexa.getSlotValue(handlerInput.requestEnvelope, 'id');
+        const result = await getFromDatabase(id);
+
+        let speakOutput;
+        if (!result || result.length === 0) {
+            speakOutput = id ? `No item found with ID ${id}.` : 'The database is empty.';
+        } else if (Array.isArray(result)) {
+            // Convert array of objects to a readable string
+            speakOutput = result.map(item => item.info || JSON.stringify(item)).join(', ');
+        } else if (typeof result === 'object') {
+            speakOutput = result.info || JSON.stringify(result);
+        } else {
+            speakOutput = String(result);
         }
+
+        return handlerInput.responseBuilder
+            .speak(speakOutput)
+            .getResponse();
+
+    } catch (err) {
+        console.error('Database error:', err);
+        return handlerInput.responseBuilder
+            .speak('Sorry, I could not access the database right now.')
+            .getResponse();
     }
+}
+
 };
 //////////////////////////////////
 ///////END CUSTOM FUNCTIONS///////
@@ -227,19 +241,13 @@ async function insertToDatabase(info = null){
 }
 
 async function getFromDatabase(id = null){
-  try {
-    let result = null;
-    if (id == null) result = await noun.selectAllRows();
-    else result = await noun.selectById({id: id});
+  let result = null;
+  if (id == null) result = await noun.selectAllRows();
+  else result = await noun.selectById({id: id});
 
-    console.log('Get Result:', result);
-    return result;
-  } catch (err) {
-    console.error('Database access error:', err);
-    throw err; // rethrow so your Alexa handler can catch it if needed
-  }
+  console.log('Get Result:', result);
+  return result;
 }
-
 
 //////////////////////////////////
 ////////ARDUINO RECEIVERS/////////
