@@ -155,9 +155,6 @@ const GetItemFromDatabaseIntentHandler = {
     }
 
 };
-//////////////////////////////////
-///////END CUSTOM FUNCTIONS///////
-//////////////////////////////////
 
 //////////////////////////////////
 ////////BUILT IN FUNCTIONS////////
@@ -258,10 +255,6 @@ const ErrorHandler = {
 };
 
 //////////////////////////////////
-//////END BUILT IN FUNCTIONS//////
-//////////////////////////////////
-
-//////////////////////////////////
 ////////DATABASE FUNCTIONS////////
 //////////////////////////////////
 //Adds an item to the database
@@ -291,6 +284,10 @@ app.post('/addtodatabase/',
         res.send("POST Request Called")
     });
 
+
+//////////////////////////////////
+////////EXPORT & RUN SERVER///////
+//////////////////////////////////
 //Build the sill so Alexa can read it
 const skillBuilder = Alexa.SkillBuilders.custom()
     .addRequestHandlers(
@@ -305,10 +302,10 @@ const skillBuilder = Alexa.SkillBuilders.custom()
         FallbackIntentHandler,
         SessionEndedRequestHandler,
         IntentReflectorHandler
+        //If Alexa isn't working when you prompt it, make sure the associated function is added here.
     )
     .addErrorHandlers(ErrorHandler)
     .withCustomUserAgent('sample/hello-world/v1.2');
-
 
 const skill = skillBuilder.create();
 const adapter = new ExpressAdapter(skill, true, true);
