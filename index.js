@@ -75,12 +75,19 @@ const GetAllFromDatabaseIntentHandler = {
         return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
             && Alexa.getIntentName(handlerInput.requestEnvelope) === 'GetAllFromDatabaseIntent';
     },
-    handle(handlerInput) {        
-        const speakOutput = getFromDatabase();
-
-        return handlerInput.responseBuilder
-            .speak(speakOutput)
-            .getResponse();
+    async handle(handlerInput) {        
+        try {
+            const result = await getFromDatabase();
+            const speakOutput = result.length ? result.join(', ') : 'The database is empty.';
+            return handlerInput.responseBuilder
+                .speak(speakOutput)
+                .getResponse();
+        } catch (err) {
+            console.error('Database error:', err);
+            return handlerInput.responseBuilder
+                .speak('Sorry, I could not access the database right now.')
+                .getResponse();
+        }
     }
 };
 
@@ -89,14 +96,20 @@ const GetItemFromDatabaseIntentHandler = {
         return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
             && Alexa.getIntentName(handlerInput.requestEnvelope) === 'GetItemFromDatabaseIntent';
     },
-    handle(handlerInput) {
-        const id = Alexa.getSlotValue(handlerInput.requestEnvelope, 'id');
-        
-        const speakOutput = getFromDatabase(id);
-
-        return handlerInput.responseBuilder
-            .speak(speakOutput)
-            .getResponse();
+    async handle(handlerInput) {
+         try {
+            const id = Alexa.getSlotValue(handlerInput.requestEnvelope, 'id');
+            const result = await getFromDatabase(id);
+            const speakOutput = result ? result : `No item found with ID ${id}.`;
+            return handlerInput.responseBuilder
+                .speak(speakOutput)
+                .getResponse();
+        } catch (err) {
+            console.error('Database error:', err);
+            return handlerInput.responseBuilder
+                .speak('Sorry, I could not access the database right now.')
+                .getResponse();
+        }
     }
 };
 //////////////////////////////////
@@ -255,11 +268,9 @@ const adapter = new ExpressAdapter(skill, true, true);
 
 app.post('/', adapter.getRequestHandlers());
 
-
 //Run Server
 const port = 3000;
 app.get('/', (req, res) => {
   res.send('Hello World!')
 })
-
 app.listen(port, () => console.log("Running on 3000"));
