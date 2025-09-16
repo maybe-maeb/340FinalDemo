@@ -227,13 +227,19 @@ async function insertToDatabase(info = null){
 }
 
 async function getFromDatabase(id = null){
-  let result = null;
-  if (id == null) result = await noun.selectAllRows();
-  else result = await noun.selectById({id: id});
+  try {
+    let result = null;
+    if (id == null) result = await noun.selectAllRows();
+    else result = await noun.selectById({id: id});
 
-  console.log('Get Result:', result);
-  return result;
+    console.log('Get Result:', result);
+    return result;
+  } catch (err) {
+    console.error('Database access error:', err);
+    throw err; // rethrow so your Alexa handler can catch it if needed
+  }
 }
+
 
 //////////////////////////////////
 ////////ARDUINO RECEIVERS/////////
