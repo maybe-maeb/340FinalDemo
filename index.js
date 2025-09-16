@@ -231,29 +231,30 @@ app.post('/addtodatabase/',
         res.send("POST Request Called")
     });
 
-//Alexa Handler
-const skill = exports.handler = Alexa.SkillBuilders.custom()
+// Build the skill
+const skillBuilder = Alexa.SkillBuilders.custom()
     .addRequestHandlers(
-        //NEW
         PingIntentHandler,
         InsertIntentHandler,
         GetAllFromDatabaseIntentHandler,
         GetItemFromDatabaseIntentHandler,
-        
-        //BUILT IN
         LaunchRequestHandler,
         HelloWorldIntentHandler,
         HelpIntentHandler,
         CancelAndStopIntentHandler,
         FallbackIntentHandler,
         SessionEndedRequestHandler,
-        IntentReflectorHandler)
-    .addErrorHandlers(
-        ErrorHandler)
-    .withCustomUserAgent('sample/hello-world/v1.2')
-    .create();
+        IntentReflectorHandler
+    )
+    .addErrorHandlers(ErrorHandler)
+    .withCustomUserAgent('sample/hello-world/v1.2');
 
-const adapter = new ExpressAdapter(skill, true, true); // or false, false, depending on your needs
+// For Lambda deployments:
+exports.handler = skillBuilder.lambda();
+
+// For Express:
+const skill = skillBuilder.create();
+const adapter = new ExpressAdapter(skill, true, true);
 
 app.post('/', adapter.getRequestHandlers());
 
