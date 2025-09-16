@@ -10,9 +10,9 @@ const Alexa = require('ask-sdk-core');
 //Express
 const express = require('express')
 const app = express()
-
 const { ExpressAdapter } = require('ask-sdk-express-adapter');
 
+//This is called when the user opens your Alexa app.
 const LaunchRequestHandler = {
     canHandle(handlerInput) {
         return Alexa.getRequestType(handlerInput.requestEnvelope) === 'LaunchRequest';
@@ -31,7 +31,8 @@ const LaunchRequestHandler = {
 /////////CUSTOM FUNCTIONS/////////
 //////////////////////////////////
 
-//A very simple call-and-response intent handler. Responds "Pong!" when the user enters "Ping"
+//A very simple call-and-response intent handler. Responds "Pong!" when the user enters "Ping".
+//If you want a good baseline handler with only the necessities, this is a good one to copy.
 const PingIntentHandler = {
     canHandle(handlerInput) {
         //If Alexa gets a request...
@@ -52,6 +53,7 @@ const PingIntentHandler = {
     }
 };
 
+//This handler adds an item to the database
 const InsertIntentHandler = {
     canHandle(handlerInput) {
         return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
@@ -70,6 +72,7 @@ const InsertIntentHandler = {
     }
 };
 
+//This handler gets Alexa to read out every item from the database
 const GetAllFromDatabaseIntentHandler = {
     canHandle(handlerInput) {
         return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
@@ -80,14 +83,20 @@ const GetAllFromDatabaseIntentHandler = {
             const result = await getFromDatabase();
 
             let speakOutput;
+            //If we don't get a result or the result is empty, make the speakOutput an error
             if (!result || result.length === 0) {
                 speakOutput = id ? `No item found with ID ${id}.` : 'The database is empty.';
-            } else if (Array.isArray(result)) {
-                // Convert array of objects to a readable string
+            } 
+            //If we get a result that is an array, make the speakOutput an easy-to-read list
+            else if (Array.isArray(result)) {
                 speakOutput = result.map(item => item.info || JSON.stringify(item)).join(', ');
-            } else if (typeof result === 'object') {
+            } 
+            //If we get a result that is one object (like one item from a database), make speakOutput the result we got from getFromDatabase()
+            else if (typeof result === 'object') {
                 speakOutput = result.info || JSON.stringify(result);
-            } else {
+            } 
+            //If we get something else, just make speakOutput a stringified version of it
+            else {
                 speakOutput = String(result);
             }
 
@@ -104,6 +113,7 @@ const GetAllFromDatabaseIntentHandler = {
     }
 };
 
+//This handler gets Alexa to read out a particular item from the database, given its ID
 const GetItemFromDatabaseIntentHandler = {
     canHandle(handlerInput) {
         return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
@@ -115,14 +125,20 @@ const GetItemFromDatabaseIntentHandler = {
             const result = await getFromDatabase(id);
 
             let speakOutput;
+            //If we don't get a result or the result is empty, make the speakOutput an error
             if (!result || result.length === 0) {
                 speakOutput = id ? `No item found with ID ${id}.` : 'The database is empty.';
-            } else if (Array.isArray(result)) {
-                // Convert array of objects to a readable string
+            } 
+            //If we get a result that is an array, make the speakOutput an easy-to-read list
+            else if (Array.isArray(result)) {
                 speakOutput = result.map(item => item.info || JSON.stringify(item)).join(', ');
-            } else if (typeof result === 'object') {
+            } 
+            //If we get a result that is one object (like one item from a database), make speakOutput the result we got from getFromDatabase()
+            else if (typeof result === 'object') {
                 speakOutput = result.info || JSON.stringify(result);
-            } else {
+            } 
+            //If we get something else, just make speakOutput a stringified version of it
+            else {
                 speakOutput = String(result);
             }
 
@@ -248,11 +264,14 @@ const ErrorHandler = {
 //////////////////////////////////
 ////////DATABASE FUNCTIONS////////
 //////////////////////////////////
+//Adds an item to the database
 async function insertToDatabase(info = null) {
     const addResult = await noun.addRow({ info: info });
     console.log('Add Result:', addResult);
 }
 
+//If ID is null, it returns all items
+//If ID is defined, it returns the item with that ID
 async function getFromDatabase(id = null) {
     let result = null;
     if (id == null) result = await noun.selectAllRows();
@@ -265,13 +284,14 @@ async function getFromDatabase(id = null) {
 //////////////////////////////////
 ////////ARDUINO RECEIVERS/////////
 //////////////////////////////////
+//When your arduino adds something to the database, this is the POST request it should be sending
 app.post('/addtodatabase/',
     (req, res) => {
-        insertToDatabase("New test item!!");
+        insertToDatabase("New test item!");
         res.send("POST Request Called")
     });
 
-// Build the skill
+//Build the sill so Alexa can read it
 const skillBuilder = Alexa.SkillBuilders.custom()
     .addRequestHandlers(
         PingIntentHandler,
@@ -289,7 +309,7 @@ const skillBuilder = Alexa.SkillBuilders.custom()
     .addErrorHandlers(ErrorHandler)
     .withCustomUserAgent('sample/hello-world/v1.2');
 
-// Remove exports.handler line
+
 const skill = skillBuilder.create();
 const adapter = new ExpressAdapter(skill, true, true);
 
