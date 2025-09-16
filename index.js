@@ -249,20 +249,12 @@ const skillBuilder = Alexa.SkillBuilders.custom()
     .addErrorHandlers(ErrorHandler)
     .withCustomUserAgent('sample/hello-world/v1.2');
 
-// For Lambda deployments:
-exports.handler = skillBuilder.lambda();
-
-// For Express:
+// Remove exports.handler line
 const skill = skillBuilder.create();
-
-console.log('Skill type:', typeof skill);
-console.log(skill);
-
-console.log('appendAdditionalUserAgent:', typeof skill.appendAdditionalUserAgent);
-
 const adapter = new ExpressAdapter(skill, true, true);
 
 app.post('/', adapter.getRequestHandlers());
+
 
 //Run Server
 const port = 3000;
