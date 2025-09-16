@@ -258,6 +258,8 @@ const skill = skillBuilder.create();
 console.log('Skill type:', typeof skill);
 console.log(skill);
 
+console.log('appendAdditionalUserAgent:', typeof skill.appendAdditionalUserAgent);
+
 const adapter = new ExpressAdapter(skill, true, true);
 
 app.post('/', adapter.getRequestHandlers());
