@@ -7,9 +7,9 @@ async function query(sql, params){
         console.log("Connecting to database...");
         connection = await mysql.createConnection({
             host: "student-databases.cvode4s4cwrc.us-west-2.rds.amazonaws.com",
-            user: "XXXXX",
-            password: "XXXXX",
-            database: 'XXXXX',
+            user: "MAE",
+            password: "gs6rjkkiNTnHqJFaG6GO3ec1J3c40KG6MQ7",
+            database: 'MAE',
             connectTimeout: 3000,
         });
         console.log("Connected to database.");
