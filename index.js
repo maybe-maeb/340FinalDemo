@@ -281,7 +281,7 @@ app.use(express.urlencoded({ extended: true }));
 //When your arduino adds something to the database, this is the POST request it should be sending
 app.post('/addtodatabase/',
     (req, res) => {
-        const { param1, param2 } = req.body;
+        const { param1 } = req.body;
         insertToDatabase(param1 || "Default Value");
         res.send("POST Request Called")
     });
