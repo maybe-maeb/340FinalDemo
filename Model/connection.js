@@ -6,10 +6,10 @@ async function query(sql, params){
     if(null === connection){
         console.log("Connecting to database...");
         connection = await mysql.createConnection({
-            host: "student-databases.cvode4s4cwrc.us-west-2.rds.amazonaws.com",
-            user: "MAE",
-            password: "gs6rjkkiNTnHqJFaG6GO3ec1J3c40KG6MQ7",
-            database: 'MAE',
+            host: "HOST",
+            user: "USERNAME",
+            password: "PASSWORD",
+            database: 'DBNAME',
             connectTimeout: 3000,
         });
         console.log("Connected to database.");
